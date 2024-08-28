@@ -47,8 +47,8 @@ app.get('/pokemons/:id', async (req, res) => {
 
 app.post('/pokemons', async (req, res) => {
 	const pokemon = new Pokemon({ 
-		_id: req.body._id, 
 		nome: req.body.nome, 
+		numero: req.body.numero, 
 		tipo: req.body.tipo, 
 		imagem: req.body.imagem, 
 	}); 
@@ -66,13 +66,7 @@ app.put('/pokemons/:id', async (req, res) => {
 		const pokemon = await Pokemon.findById(req.params.id); 
 		if (pokemon == null) {
 			return res.status(404).json({ message: 'Pokémon não encontrado'})
-		}; 
-
-		pokemon.nome = req.body.nome || pokemon.nome; 
-		pokemon.numero = req.body.numero || pokemon.numero; 
-		pokemon.tipo = req.body.tipo || pokemon.tipo; 
-		pokemon.imagem = req.body.imagem || pokemon.imagem; 
-
+		};  
 		const pokemonAtualizado = await pokemon.save(); 
 		res.json(pokemonAtualizado); 
 	} catch (err) { 
