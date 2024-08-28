@@ -1,10 +1,12 @@
 const express = require('express'); 
 const mongoose = require('mongoose'); 
+const router = require('./routes')
 
 const app = express(); 
 const port = 3000; 
 
 app.use(express.json()); 
+app.use('/', router);
 
 mongoose.connect('mongodb://localhost:27017/pokedex', {
 	
@@ -14,76 +16,6 @@ mongoose.connect('mongodb://localhost:27017/pokedex', {
 	console.error('Conexão com o MongoDB sem sucesso :( '); 
 }); 
 
-app.get('/', (req, res) => {
-	res.send('API está funcionando!'); 
-});
-
 app.listen(port, () => {
     console.log('Servidor rodando em htpp://localhost:${port}'); 
-}); 
-
-const Pokemon = require('./models/Pokemon'); 
-
-app.get('/pokemons', async (req, res) => {
-	try {
-		const pokemons = await Pokemon.find(); 
-		res.json(pokemons); 
-	} catch (err) { 
-		res.status(500).json({ message: err.message }); 
-	}
-}); 
-
-app.get('/pokemons/:id', async (req, res) => {
-	try {
-		const pokemon = await Pokemon.findById(req.params.id); 
-		if (pokemon == null) { 
-			return res.status(404).json({ message: 'Pokémon não encontrado'}); 
-		}
-		res.json(pokemon); 
-	} catch (err) {
-		res.status(500).json({ message: err.message}); 
-	}
-}); 
-
-app.post('/pokemons', async (req, res) => {
-	const pokemon = new Pokemon({ 
-		nome: req.body.nome, 
-		numero: req.body.numero, 
-		tipo: req.body.tipo, 
-		imagem: req.body.imagem, 
-	}); 
-
-	try {
-		const novoPokemon = await pokemon.save(); 
-		res.status(201).json(novoPokemon); 
-	} catch (err) {
-		res.status(400).json({ message: err.message}); 
-	}
-}); 
-
-app.put('/pokemons/:id', async (req, res) => {
-	try {
-		const pokemon = await Pokemon.findById(req.params.id); 
-		if (pokemon == null) {
-			return res.status(404).json({ message: 'Pokémon não encontrado'})
-		};  
-		const pokemonAtualizado = await pokemon.save(); 
-		res.json(pokemonAtualizado); 
-	} catch (err) { 
-		res.status(400).json({ message: err.message }); 
-	}
-}); 
-
-app.delete('/pokemons/:id', async (req, res) => {
-	try { 
-		const pokemon = await Pokemon.findById(req.params.id); 
-		if(pokemon == null) {
-			return res.status(404).json({ message: 'Pokémon não encontrado'}); 
-		}
-
-		await pokemon.deleteOne(); 
-		res.json({ message: 'Pokémon removido'}); 
-	} catch (err) {
-		res.status(500).json({ message: err.message }); 
-	}
 }); 
