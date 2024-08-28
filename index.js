@@ -10,7 +10,7 @@ app.use('/', router);
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pokedex';  
 
-mongoose.connect(MONGODB_URI).then(() => {
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }).then(() => {
 	console.log('Conexão com o MongoDB realizada com sucesso :)'); 
 }).catch((err) => {
 	console.error('Conexão com o MongoDB sem sucesso :( '); 
