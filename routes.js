@@ -4,12 +4,12 @@ const Pokemon = require('./models/Pokemon');
 const router = express.Router(); 
 
 router.get('/', (req, res) => {
-	res.send('API está funcionando!'); 
+	res.send('API está funcionando corretamente!');  
 });
 
 router.get('/pokemons', async (req, res) => {
 	try {
-		const pokemons = await Pokemon.find(); 
+		const pokemons = await Pokemon.find();
 		res.json(pokemons); 
 	} catch (err) { 
 		res.status(500).json({ message: err.message }); 
